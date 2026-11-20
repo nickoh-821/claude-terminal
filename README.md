@@ -7,7 +7,10 @@ Claude Code runs in the terminal's alternate screen, so there is no scrollback t
 sessions get big: my largest transcript is 136 MB. ⌘L reads the session's JSONL file instead and
 shows the conversation folded to your own messages. Each one unfolds to what Claude did in reply.
 
-<!-- demo GIF goes here -->
+![⌘L on a 2,401-turn session: the transcript opens, filters as you type, and turns unfold](docs/demo.gif)
+
+*The recording is a real Claude Code session on top of a mock history: 2,400 invented turns (79 MB),
+with the one real exchange at the end.*
 
 ## How fast
 
