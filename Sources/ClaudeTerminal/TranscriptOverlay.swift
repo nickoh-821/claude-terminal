@@ -87,7 +87,7 @@ final class TranscriptOverlayView: NSView {
             let snap = tail.snapshot
             Perf.record("open.parse", since: parseStart, "\(snap.turns.count) turns")
             let measureStart = Perf.now()
-            let batch = known.missing(in: snap, responses: snap.turns.indices.suffix(1).map { $0 })
+            let batch = known.missing(in: snap, responses: [])
             Perf.record("open.measure", since: measureStart,
                         "\(batch.user.count + batch.response.count) rows")
             DispatchQueue.main.async { self?.loaded(tail, snap, known, batch) }
@@ -117,8 +117,7 @@ final class TranscriptOverlayView: NSView {
         fileName = (tail.path as NSString).lastPathComponent
         var heights = heights
         heights.apply(batch)
-        doc.load(snap, heights: heights)
-        doc.openAtEnd()   // land on the latest turn, expanded
+        doc.load(snap, heights: heights)   // latest turn selected; every turn starts folded
         layoutDoc()
         scrollToBottom()
         updateStatus()
@@ -423,14 +422,6 @@ final class TranscriptDocView: NSView {
     private func rebuildVisible() {
         visible = filter.isEmpty ? Array(snap.turns.indices)
             : snap.turns.indices.filter { matches[$0] }
-    }
-
-    /// The opening view: latest turn selected and unfolded.
-    func openAtEnd() {
-        guard let last = visible.last else { return }
-        expanded.insert(last)
-        selected = visible.count - 1
-        dirty = true
     }
 
     // MARK: - Heights
