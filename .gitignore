@@ -1,0 +1,4 @@
+.build/
+ClaudeTerminal.app/
+.DS_Store
+.swiftpm/
