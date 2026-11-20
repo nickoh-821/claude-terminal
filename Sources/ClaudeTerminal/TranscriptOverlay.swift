@@ -248,7 +248,7 @@ final class TranscriptOverlayView: NSView {
                 DispatchQueue.main.async { [openedAt] in Perf.record("open.firstFrame", since: openedAt) }
             }
         }
-        Theme.tabBar.withAlphaComponent(0.97).setFill()
+        Theme.tabBar.setFill()   // opaque: the terminal underneath must not show through
         bounds.fill()
         let hint = NSAttributedString(
             string: "TRANSCRIPT — Space expand · ↑↓ move · A all · type to filter · Esc close",
