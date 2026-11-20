@@ -197,12 +197,24 @@ final class TranscriptOverlayView: NSView {
         super.layout()
         searchField.frame = NSRect(x: bounds.width - 244, y: bounds.height - 36,
                                    width: 220, height: 26)
-        statusLabel.frame = NSRect(x: 24, y: bounds.height - 30,
-                                   width: bounds.width - 288, height: 14)
+        let statusX = statusLeftEdge
+        statusLabel.frame = NSRect(x: statusX, y: bounds.height - 30,
+                                   width: bounds.width - 264 - statusX, height: 14)
         let contentWidth = min(bounds.width - 48, 860)
         scroll.frame = NSRect(x: (bounds.width - contentWidth) / 2, y: 12,
                               width: contentWidth, height: bounds.height - 78)
         layoutDoc()
+    }
+
+    /// Where the status line starts: 24 pt in, or just past the window's
+    /// close/minimise/zoom buttons when this view runs up under the title bar
+    /// and they would sit on top of the text.
+    private var statusLeftEdge: CGFloat {
+        guard let zoom = window?.standardWindowButton(.zoomButton),
+              let host = zoom.superview else { return 24 }
+        let button = convert(zoom.frame, from: host)
+        let row = NSRect(x: 0, y: bounds.height - 38, width: bounds.width, height: 30)
+        return button.intersects(row) ? max(24, button.maxX + 14) : 24
     }
 
     private func layoutDoc() {
